@@ -1,0 +1,14 @@
+extend sub-layout.pug
+
+append css
+  style.
+    img{
+      width:100%;
+      max-width:300px;
+    }
+
+block content
+  ul
+    each image in images
+      a(href='/pictures/' + image)
+        img(src="/upload/" + image)
