@@ -1,0 +1,21 @@
+extends sub-layout
+
+block content
+  div(class='row')
+    div(class='col-md-6')
+      table(class='table table-striped')
+        thead
+          tr
+            th name
+            th red
+            th green
+            th blue
+            th render
+        tbody
+          each color in colors
+            tr
+              td #{color.name}
+              td #{color.red}
+              td #{color.green}
+              td #{color.blue}
+              td(class='well' id='color' style='width:100%;height:50px;float:left;background:' + color.name + '' )

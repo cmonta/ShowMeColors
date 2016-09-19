@@ -1,60 +1,3 @@
-$(function() {
-    
-    $("canvas").click(function(e) {
-        if(!this.canvas) {
-            this.canvas = document.getElementById('canvas')
-        }
-
-        var colorList = fullColorList;
-
-        var offX  = (e.offsetX || e.clientX - $(e.target).offset().left);
-        var offY  = (e.offsetY || e.clientY - $(e.target).offset().top);
-
-        var pixelData = this.canvas.getContext('2d').getImageData(offX, offY, 1, 1).data;
-        var ctx = this.canvas.getContext('2d');
-
-        var rgba = 'rgba(' + pixelData[0] + ',' + pixelData[1] + ',' + pixelData[2] + ',' + pixelData[3] + ')';
-
-        var color = document.getElementById('color');
-        color.style.background = rgba;
-        
-        //var colName = tinycolor(rgba);
-        
-        $('#output').html('R: ' + pixelData[0] + '<br>G: ' + pixelData[1] + '<br>B: ' + pixelData[2]);
-        
-        var distanceToColor = [];
-
-        for (i = 0; i < colorList.length; i++) {
-        /*    var distance =  Math.pow(((pixelData[0] - colorList[i].red)*0.30), 2) +
-                            Math.pow(((pixelData[1] - colorList[i].green)*0.59), 2) +
-                            Math.pow(((pixelData[2] - colorList[i].blue)*0.11), 2);*/
-
-            var distance = Math.sqrt( Math.pow((pixelData[0] - colorList[i].red), 2) +
-                            Math.pow((pixelData[1] - colorList[i].green), 2) +
-                            Math.pow((pixelData[2] - colorList[i].blue), 2));
-            distanceToColor.push([distance, colorList[i].name])
-        }
-        
-        distanceToColor.sort(sortFunction);
-
-        for (i = 0; i < 3; i++) {
-            $('#colorName' + i).html(   distanceToColor[i][1] + '<br>' +
-                                        'Distance : ' + parseFloat(distanceToColor[i][0]).toFixed(0));
-            $('#color' + i).css('background-color', distanceToColor[i][1]);
-        }
-
-        
-    });
-    
-function sortFunction(a, b) {
-    if (a[0] === b[0]) {
-        return 0;
-    }
-    else {
-        return (a[0] < b[0]) ? -1 : 1;
-    }
-}
-
 var fullColorList = [
 {"name":"aliceblue", "red":240, "green":248, "blue":255},
 {"name":"antiquewhite", "red":250, "green":235, "blue":215},
@@ -80,7 +23,7 @@ var fullColorList = [
 {"name":"darkblue", "red":0, "green":0, "blue":139},
 {"name":"darkcyan", "red":0, "green":139, "blue":139},
 {"name":"darkgoldenrod", "red":184, "green":134, "blue":11},
-//{"name":"darkgray", "red":169, "green":169, "blue":169},
+{"name":"darkgray", "red":169, "green":169, "blue":169},
 {"name":"darkgreen", "red":0, "green":100, "blue":0},
 {"name":"darkgrey", "red":169, "green":169, "blue":169},
 {"name":"darkkhaki", "red":189, "green":183, "blue":107},
@@ -92,13 +35,13 @@ var fullColorList = [
 {"name":"darksalmon", "red":233, "green":150, "blue":122},
 {"name":"darkseagreen", "red":143, "green":188, "blue":143},
 {"name":"darkslateblue", "red":72, "green":61, "blue":139},
-//{"name":"darkslategray", "red":47, "green":79, "blue":79},
+{"name":"darkslategray", "red":47, "green":79, "blue":79},
 {"name":"darkslategrey", "red":47, "green":79, "blue":79},
 {"name":"darkturquoise", "red":0, "green":206, "blue":209},
 {"name":"darkviolet", "red":148, "green":0, "blue":211},
 {"name":"deeppink", "red":255, "green":20, "blue":147},
 {"name":"deepskyblue", "red":0, "green":191, "blue":255},
-//{"name":"dimgray", "red":105, "green":105, "blue":105},
+{"name":"dimgray", "red":105, "green":105, "blue":105},
 {"name":"dimgrey", "red":105, "green":105, "blue":105},
 {"name":"dodgerblue", "red":30, "green":144, "blue":255},
 {"name":"firebrick", "red":178, "green":34, "blue":34},
@@ -109,7 +52,7 @@ var fullColorList = [
 {"name":"ghostwhite", "red":248, "green":248, "blue":255},
 {"name":"gold", "red":255, "green":215, "blue":0},
 {"name":"goldenrod", "red":218, "green":165, "blue":32},
-//{"name":"gray", "red":128, "green":128, "blue":128},
+{"name":"gray", "red":128, "green":128, "blue":128},
 {"name":"green", "red":0, "green":128, "blue":0},
 {"name":"greenyellow", "red":173, "green":255, "blue":47},
 {"name":"grey", "red":128, "green":128, "blue":128},
@@ -127,14 +70,14 @@ var fullColorList = [
 {"name":"lightcoral", "red":240, "green":128, "blue":128},
 {"name":"lightcyan", "red":224, "green":255, "blue":255},
 {"name":"lightgoldenrodyellow", "red":250, "green":250, "blue":210},
-//{"name":"lightgray", "red":211, "green":211, "blue":211},
+{"name":"lightgray", "red":211, "green":211, "blue":211},
 {"name":"lightgreen", "red":144, "green":238, "blue":144},
 {"name":"lightgrey", "red":211, "green":211, "blue":211},
 {"name":"lightpink", "red":255, "green":182, "blue":193},
 {"name":"lightsalmon", "red":255, "green":160, "blue":122},
 {"name":"lightseagreen", "red":32, "green":178, "blue":170},
 {"name":"lightskyblue", "red":135, "green":206, "blue":250},
-//{"name":"lightslategray", "red":119, "green":136, "blue":153},
+{"name":"lightslategray", "red":119, "green":136, "blue":153},
 {"name":"lightslategrey", "red":119, "green":136, "blue":153},
 {"name":"lightsteelblue", "red":176, "green":196, "blue":222},
 {"name":"lightyellow", "red":255, "green":255, "blue":224},
@@ -187,7 +130,7 @@ var fullColorList = [
 {"name":"silver", "red":192, "green":192, "blue":192},
 {"name":"skyblue", "red":135, "green":206, "blue":235},
 {"name":"slateblue", "red":106, "green":90, "blue":205},
-//{"name":"slategray", "red":112, "green":128, "blue":144},
+{"name":"slategray", "red":112, "green":128, "blue":144},
 {"name":"slategrey", "red":112, "green":128, "blue":144},
 {"name":"snow", "red":255, "green":250, "blue":250},
 {"name":"springgreen", "red":0, "green":255, "blue":127},
@@ -221,4 +164,7 @@ var smallColorList = [
 {"name":"Purple", "red":128, "green":0, "blue":128},
 {"name":"Teal", "red":0, "green":128, "blue":128},
 {"name":"Navy", "red":0, "green":0, "blue":128}]
-});
+
+exports.fullColorList = fullColorList;
+exports.smallColorList = smallColorList;
+

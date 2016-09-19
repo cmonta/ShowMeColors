@@ -11,25 +11,32 @@ block content
   div
     div(class='row')
       div(class='col-md-3')
-        p(class='well' style='text-align: left') Cliquez sur différentes zones de l'image selectionnée pour voir s'afficher ses différentes couleurs. Vous pouvez également uploader vos propres images.<br> Les fichiers doivent être au format JPEG et avoir une taille maximale de 5mo.
+        div(class='panel panel-default')
+          div(class='panel-heading') Comment ça fonctionne ?
+          div(class='panel-body') Cliquez sur différentes zones de l'image selectionnée pour voir s'afficher ses différentes couleurs. Vous pouvez également uploader vos propres images.<br> Les fichiers doivent être au format JPEG et avoir une taille maximale de 5mo.
+
+        input(type="file" name='imageFile' id='loadImage' class="filestyle" accept="image/*" data-placeholder="No file" data-size="sm" data-buttonText="" data-buttonBefore="true")
         
-      div(class='col-md-6')
-        img(src=imgName)
+      div(class='col-md-6' id='divCanvas')
+        canvas(id='canvas' class='img-rounded img-responsive' width='0' height='0')
       div(class='col-md-3')
-        pre#output
-          | R: 0
-          | G: 0
-          | B: 0
+        div(class='panel panel-default')
+          div(class='panel-heading') Couleur sélectionnée
+          div(class='panel-body')
+            p#output
+              | R: 0<br>
+              | G: 0<br>
+              | B: 0<br>
+            div(id='color' style="width:100%;height:50px;float:left;background:lightgrey")
 
-        pre#colorName
-          | None
-          | None
-          | None
-
-        div(class='well' id='color' style="width:100%;height:50px;float:left;background:lightgrey")
-
-        include form
+        div(class='panel panel-info')
+          div(class='panel-heading') Couleurs proches
+          div(class='panel-body')
+            include colorDisplay
 
   script(src="https://code.jquery.com/jquery-3.1.0.slim.min.js"   integrity="sha256-cRpWjoSOw5KcyIOaZNo4i6fZ9tKPhYYb6i5T9RSVJG8="   crossorigin="anonymous")
+  script(src='/javascripts/bootstrap-filestyle.js')
   script(src="/javascripts/tinycolor.js")
+  script(src="/javascripts/load-image.all.min.js")
+  script(src="/javascripts/displayImage.js")
   script(src="/javascripts/getPixel.js")
