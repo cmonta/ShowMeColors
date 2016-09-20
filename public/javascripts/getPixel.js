@@ -15,6 +15,8 @@ $(function() {
 
         var rgba = 'rgba(' + pixelData[0] + ',' + pixelData[1] + ',' + pixelData[2] + ',' + pixelData[3] + ')';
 
+        var xyz = rgb2xyz(pixelData);
+
         var color = document.getElementById('color');
         color.style.background = rgba;
         
@@ -24,22 +26,32 @@ $(function() {
         
         var distanceToColor = [];
 
-        for (i = 0; i < colorList.length; i++) {
-        /*    var distance =  Math.pow(((pixelData[0] - colorList[i].red)*0.30), 2) +
-                            Math.pow(((pixelData[1] - colorList[i].green)*0.59), 2) +
-                            Math.pow(((pixelData[2] - colorList[i].blue)*0.11), 2);*/
+        /*for (i = 0; i < colorList.length; i++) {
+        
 
             var distance = Math.sqrt( Math.pow((pixelData[0] - colorList[i].red), 2) +
                             Math.pow((pixelData[1] - colorList[i].green), 2) +
                             Math.pow((pixelData[2] - colorList[i].blue), 2));
             distanceToColor.push([distance, colorList[i].name])
+        }*/
+
+        for (i = 0; i < colorList.length; i++) {
+            var colorListRgb = [colorList[i].red,
+                                colorList[i].green,
+                                colorList[i].blue];
+            var colorListXyz =  rgb2xyz(colorListRgb);
+
+            var distance = Math.sqrt(   Math.pow((xyz[0] - colorListXyz[0]), 2) +
+                                        Math.pow((xyz[1] - colorListXyz[1]), 2) +
+                                        Math.pow((xyz[2] - colorListXyz[2]), 2));
+            distanceToColor.push([distance, colorList[i].name]);
         }
         
         distanceToColor.sort(sortFunction);
 
         for (i = 0; i < 3; i++) {
             $('#colorName' + i).html(   distanceToColor[i][1] + '<br>' +
-                                        'Distance : ' + parseFloat(distanceToColor[i][0]).toFixed(0));
+                                        'Distance : ' + parseFloat(distanceToColor[i][0]).toFixed(3));
             $('#color' + i).css('background-color', distanceToColor[i][1]);
         }
 
@@ -54,6 +66,112 @@ function sortFunction(a, b) {
         return (a[0] < b[0]) ? -1 : 1;
     }
 }
+
+function rgb2hcl(rgbArr) {
+    var r1 = rgbArr[0] / 255;
+    var g1 = rgbArr[1] / 255;
+    var b1 = rgbArr[2] / 255;
+ 
+    var maxColor = Math.max(r1,g1,b1);
+    var minColor = Math.min(r1,g1,b1);
+
+    var C = maxColor - minColor;
+    var L = (maxColor + minColor) / 2;
+    var H = 0;
+
+    if(maxColor != minColor){
+        //Calculate H:
+        if(r1 == maxColor){
+            H = (g1-b1) / (maxColor - minColor);
+        }else if(g1 == maxColor){
+            H = 2.0 + (b1 - r1) / (maxColor - minColor);
+        }else{
+            H = 4.0 + (r1 - g1) / (maxColor - minColor);
+        }
+    }
+
+    H = H * 60;
+    if(H<0){
+        H += 360;
+    }
+    var result = [H, C, L];
+    return result;
+}
+
+/*
+* Converts an RGB color to HSL
+* Parameters
+*     rgbArr : 3-element array containing the RGB values
+*
+* Result : 3-element array containing the HSL values
+*
+*/
+function rgb2hsl(rgbArr){
+    var r1 = rgbArr[0] / 255;
+    var g1 = rgbArr[1] / 255;
+    var b1 = rgbArr[2] / 255;
+ 
+    var maxColor = Math.max(r1,g1,b1);
+    var minColor = Math.min(r1,g1,b1);
+    //Calculate L:
+    var L = (maxColor + minColor) / 2 ;
+    var S = 0;
+    var H = 0;
+    if(maxColor != minColor){
+        //Calculate S:
+        if(L < 0.5){
+            S = (maxColor - minColor) / (maxColor + minColor);
+        }else{
+            S = (maxColor - minColor) / (2.0 - maxColor - minColor);
+        }
+        //Calculate H:
+        if(r1 == maxColor){
+            H = (g1-b1) / (maxColor - minColor);
+        }else if(g1 == maxColor){
+            H = 2.0 + (b1 - r1) / (maxColor - minColor);
+        }else{
+            H = 4.0 + (r1 - g1) / (maxColor - minColor);
+        }
+    }
+ 
+    L = L * 100;
+    S = S * 100;
+    H = H * 60;
+    if(H<0){
+        H += 360;
+    }
+    var result = [H, S, L];
+    return result;
+};
+
+function normalizeHcl (hclArr) {
+    var H = hclArr[0] / 180;
+    var C = hclArr[1];
+    var L =  hclArr[2] - 1;
+
+    var result = [H, C, L];
+    return result;
+};
+
+function convertXyz (normalizedHcl) {
+    var H = normalizedHcl[0],
+        C = normalizedHcl[1],
+        L = normalizedHcl[2];
+
+    x = C * Math.cos(H * Math.PI);
+    y = C * Math.sin(H * Math.PI);
+    z = L;
+    var result = [x, y, z];
+    return result;
+};
+
+function rgb2xyz (rgbArr) {
+    var hcl = rgb2hcl(rgbArr);
+    var normalizedHcl = normalizeHcl(hcl);
+    var xyz = convertXyz(normalizedHcl);
+    return xyz;
+};
+
 
 var fullColorList = [
 {"name":"aliceblue", "red":240, "green":248, "blue":255},
