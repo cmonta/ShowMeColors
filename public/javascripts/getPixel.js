@@ -2,15 +2,22 @@ $(function() {
     
     $('img').click(function(e) {
         
+        // On copie l'image une seule fois, à sa taille réelle (et non à sa
+        // taille affichée) : la copie reste valable même si la fenêtre change.
         if(!this.canvas) {
-            this.canvas = $('<canvas/>').css({width:this.width + 'px', height: this.height + 'px'})[0];
-            this.canvas.width = this.width;
-            this.canvas.height = this.height;
-            this.canvas.getContext('2d').drawImage(this, 0, 0, this.width, this.height);
+            this.canvas = document.createElement('canvas');
+            this.canvas.width = this.naturalWidth;
+            this.canvas.height = this.naturalHeight;
+            this.canvas.getContext('2d').drawImage(this, 0, 0);
         }
-         var offX  = (e.offsetX || e.clientX - $(e.target).offset().left);
-         var offY  = (e.offsetY || e.clientY - $(e.target).offset().top);
-        
+
+        // Position du clic dans l'image affichée, convertie en pixel de l'image réelle
+        var rect = this.getBoundingClientRect();
+        var offX = Math.floor((e.clientX - rect.left) * this.naturalWidth / rect.width);
+        var offY = Math.floor((e.clientY - rect.top) * this.naturalHeight / rect.height);
+        offX = Math.min(Math.max(offX, 0), this.naturalWidth - 1);
+        offY = Math.min(Math.max(offY, 0), this.naturalHeight - 1);
+
         var pixelData = this.canvas.getContext('2d').getImageData(offX, offY, 1, 1).data;
 
         var rgba = 'rgba(' + pixelData[0] + ',' + pixelData[1] + ',' + pixelData[2] + ',' + pixelData[3] + ')';
