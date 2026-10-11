@@ -6,7 +6,9 @@ RUN npm install --omit=dev && npm cache clean --force
 # et sont lisibles quelles que soient les permissions du dossier d'origine
 # (sur un NAS, les fichiers copiés sont souvent réservés à leur propriétaire)
 COPY --chown=node:node . .
-RUN chmod -R u+rwX,go+rX /app \
+# (node_modules est exclu : il a déjà les bons droits et contient des milliers
+# de fichiers, ce qui rendait cette étape très lente)
+RUN find /app -path /app/node_modules -prune -o -exec chmod u+rwX,go+rX {} + \
  && mkdir -p public/upload && chown -R node:node public/upload
 USER node
 EXPOSE 3000
