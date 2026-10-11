@@ -4,7 +4,7 @@ var express = require('express')
 router.use('/pictures', require('./pictures'))
 
 router.get('/', function(req, res) {
-  res.render('image', {imgName: '/upload/default'});
+  res.render('image', {imgName: '/images/default.jpg'});
 })
 
 module.exports = router

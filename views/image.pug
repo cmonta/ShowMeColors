@@ -8,10 +8,12 @@ append css
     }
 
 block content
+  if error
+    div(class='alert alert-danger')= error
   div
     div(class='row')
       div(class='col-md-3')
-        p(class='well' style='text-align: left') Cliquez sur différentes zones de l'image selectionnée pour voir s'afficher ses différentes couleurs. Vous pouvez également uploader vos propres images.<br> Les fichiers doivent être au format JPEG et avoir une taille maximale de 5mo.
+        p(class='well' style='text-align: left') Cliquez sur différentes zones de l'image selectionnée pour voir s'afficher ses différentes couleurs. Vous pouvez également uploader vos propres images.<br> Les fichiers doivent être au format JPEG, PNG ou WebP et peser 5 Mo au maximum.
         
       div(class='col-md-6')
         img(src=imgName)
@@ -30,6 +32,5 @@ block content
 
         include form
 
-  script(src="https://code.jquery.com/jquery-3.1.0.slim.min.js"   integrity="sha256-cRpWjoSOw5KcyIOaZNo4i6fZ9tKPhYYb6i5T9RSVJG8="   crossorigin="anonymous")
   script(src="/javascripts/tinycolor.js")
   script(src="/javascripts/getPixel.js")

@@ -23,7 +23,7 @@ $(function() {
         $('#output').html('R: ' + pixelData[0] + '<br>G: ' + pixelData[1] + '<br>B: ' + pixelData[2]);
         
         var distanceToColor = [];
-        for (i = 0; i < colorList.length; i++) {
+        for (var i = 0; i < colorList.length; i++) {
             /*var distance = Math.sqrt(   Math.pow((pixelData[0] - colorList[i].red), 2) +
                                         Math.pow((pixelData[1] - colorList[i].green), 2) +
                                         Math.pow((pixelData[2] - colorList[i].blue), 2));*/

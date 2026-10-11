@@ -1,0 +1,13 @@
+services:
+  showmecolors:
+    build: .
+    image: showmecolors
+    container_name: showmecolors
+    ports:
+      - "3000:3000"
+    volumes:
+      - uploads:/app/public/upload
+    restart: unless-stopped
+
+volumes:
+  uploads:
